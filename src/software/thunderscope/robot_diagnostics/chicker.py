@@ -86,6 +86,7 @@ class ChickerWidget(QWidget):
         :returns: None
 
         """
+        # yo whats up
         if enable:
             button.setStyleSheet("background-color: White")
             button.setCheckable(True)
