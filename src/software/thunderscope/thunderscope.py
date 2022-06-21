@@ -62,6 +62,7 @@ from software.thunderscope.robot_diagnostics.drive_and_dribbler_widget import (
     DriveAndDribblerWidget,
 )
 from software.thunderscope.replay.proto_player import ProtoPlayer
+from software.thunderscope.pass_generator.pass_gen import PassGenerator
 
 SAVED_LAYOUT_PATH = "/opt/tbotspython/saved_tscope_layout"
 NUM_ROBOTS = 6
@@ -380,11 +381,16 @@ class Thunderscope(object):
         playinfo_dock = Dock("Play Info")
         playinfo_dock.addWidget(widgets["playinfo_widget"])
 
+        widgets["passgen_widget"] = self.setup_passgen(full_system_proto_unix_io)
+        passgen_dock = Dock("Passgen")
+        passgen_dock.addWidget(widgets["passgen_widget"])
+
         dock_area.addDock(field_dock)
         dock_area.addDock(log_dock, "left", field_dock)
         dock_area.addDock(parameter_dock, "above", log_dock)
         dock_area.addDock(playinfo_dock, "bottom", field_dock)
         dock_area.addDock(performance_dock, "right", playinfo_dock)
+        dock_area.addDock(passgen_dock, "right", field_dock)
 
     def setup_field_widget(
         self, sim_proto_unix_io, full_system_proto_unix_io, friendly_colour_yellow
@@ -549,6 +555,11 @@ class Thunderscope(object):
         """
 
         return DriveAndDribblerWidget()
+
+    def setup_passgen(self, proto_unix_io):
+        passgen_widget = PassGenerator()
+        self.register_refresh_function(passgen_widget.refresh)
+        return passgen_widget
 
     def show(self):
         """Show the main window"""
