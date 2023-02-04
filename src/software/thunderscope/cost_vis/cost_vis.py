@@ -66,18 +66,22 @@ class CostVisualizationWidget(QtWidgets.QMainWindow):
         # the index of the cost in the cost_vis.name_and_costs array
         # is determined by the order in which the cost functions are
         # passed in in tbots_protobuf.cpp
+        # self.static_position_quality = np.array(
+        #     cost_vis.name_and_costs[0].cost
+        # ).reshape(cost_vis.num_cols, cost_vis.num_rows)
+        # self.pass_friendly_capability = np.array(
+        #     cost_vis.name_and_costs[1].cost
+        # ).reshape(cost_vis.num_cols, cost_vis.num_rows)
+        # self.pass_enemy_risk = np.array(cost_vis.name_and_costs[2].cost).reshape(
+        #     cost_vis.num_cols, cost_vis.num_rows
+        # )
+        # self.pass_shoot_score = np.array(cost_vis.name_and_costs[3].cost).reshape(
+        #     cost_vis.num_cols, cost_vis.num_rows
+        # )
+
         self.static_position_quality = np.array(
-            cost_vis.name_and_costs[0].cost
+            cost_vis.name_and_costs.cost
         ).reshape(cost_vis.num_cols, cost_vis.num_rows)
-        self.pass_friendly_capability = np.array(
-            cost_vis.name_and_costs[1].cost
-        ).reshape(cost_vis.num_cols, cost_vis.num_rows)
-        self.pass_enemy_risk = np.array(cost_vis.name_and_costs[2].cost).reshape(
-            cost_vis.num_cols, cost_vis.num_rows
-        )
-        self.pass_shoot_score = np.array(cost_vis.name_and_costs[3].cost).reshape(
-            cost_vis.num_cols, cost_vis.num_rows
-        )
 
         # multiply all the arrays together
         self.data = np.ones(shape=(6, 3))

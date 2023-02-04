@@ -210,9 +210,8 @@ template <class ZoneEnum>
 void PassGenerator<ZoneEnum>::sampleZoneCentrePasses(const World& world)
 {
     // this decides the numbers of rows and cols we visualize
-    // TODO: move to contants file
-    int NUM_ROWS  = 3;
-    int NUM_COLS  = 6;
+    int NUM_ROWS  = 30;
+    int NUM_COLS  = 45;
     double width  = world.field().xLength() / NUM_COLS;
     double height = world.field().yLength() / NUM_ROWS;
 
@@ -222,7 +221,7 @@ void PassGenerator<ZoneEnum>::sampleZoneCentrePasses(const World& world)
     std::vector<double> pass_enemy_risk_costs;
     std::vector<double> pass_shoot_score_costs;
 
-    // We loop column wise (int the same order as how zones are defined)
+    // We loop column wise (in the same order as how zones are defined)
     for (int i = 0; i < NUM_COLS; i++)
     {
         // x coordinate of the centre of the column
@@ -238,26 +237,26 @@ void PassGenerator<ZoneEnum>::sampleZoneCentrePasses(const World& world)
             static_pos_quality_costs.push_back(getStaticPositionQuality(
                 world.field(), pass.receiverPoint(), passing_config_));
 
-            // ratePassFriendlyCapability
-            pass_friendly_capability_costs.push_back(
-                ratePassFriendlyCapability(world.friendlyTeam(), pass, passing_config_));
+            // // ratePassFriendlyCapability
+            // pass_friendly_capability_costs.push_back(
+            //     ratePassFriendlyCapability(world.friendlyTeam(), pass, passing_config_));
 
-            // ratePassEnemyRisk
-            pass_enemy_risk_costs.push_back(ratePassEnemyRisk(
-                world.enemyTeam(), pass,
-                Duration::fromSeconds(passing_config_.enemy_reaction_time()),
-                passing_config_.enemy_proximity_importance()));
+            // // ratePassEnemyRisk
+            // pass_enemy_risk_costs.push_back(ratePassEnemyRisk(
+            //     world.enemyTeam(), pass,
+            //     Duration::fromSeconds(passing_config_.enemy_reaction_time()),
+            //     passing_config_.enemy_proximity_importance()));
 
-            // ratePassShootScore
-            pass_shoot_score_costs.push_back(ratePassShootScore(
-                world.field(), world.enemyTeam(), pass, passing_config_));
+            // // ratePassShootScore
+            // pass_shoot_score_costs.push_back(ratePassShootScore(
+            //     world.field(), world.enemyTeam(), pass, passing_config_));
         }
     }
 
     func_to_costs["getStaticPositionQuality"]   = static_pos_quality_costs;
-    func_to_costs["ratePassFriendlyCapability"] = pass_friendly_capability_costs;
-    func_to_costs["ratePassEnemyRisk"]          = pass_enemy_risk_costs;
-    func_to_costs["ratePassShootScore"]         = pass_shoot_score_costs;
+    // func_to_costs["ratePassFriendlyCapability"] = pass_friendly_capability_costs;
+    // func_to_costs["ratePassEnemyRisk"]          = pass_enemy_risk_costs;
+    // func_to_costs["ratePassShootScore"]         = pass_shoot_score_costs;
 
     LOG(VISUALIZE) << *createCostVisualization(func_to_costs, NUM_ROWS, NUM_COLS);
 }

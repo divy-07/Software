@@ -360,21 +360,24 @@ std::unique_ptr<TbotsProto::CostVisualization> createCostVisualization(
     cost_visualization_msg->set_num_rows(num_rows);
     cost_visualization_msg->set_num_cols(num_cols);
 
-    // getStaticPositionQuality
-    *(cost_visualization_msg->add_name_and_costs()) = *createNameCostsPair(
+    // // getStaticPositionQuality
+    // *(cost_visualization_msg->add_name_and_costs()) = *createNameCostsPair(
+    //     "getStaticPositionQuality", ratings.at("getStaticPositionQuality"));
+
+    *(cost_visualization_msg->mutable_name_and_costs()) = *createNameCostsPair(
         "getStaticPositionQuality", ratings.at("getStaticPositionQuality"));
 
-    // ratePassFriendlyCapability
-    *(cost_visualization_msg->add_name_and_costs()) = *createNameCostsPair(
-        "ratePassFriendlyCapability", ratings.at("ratePassFriendlyCapability"));
+    // // ratePassFriendlyCapability
+    // *(cost_visualization_msg->add_name_and_costs()) = *createNameCostsPair(
+    //     "ratePassFriendlyCapability", ratings.at("ratePassFriendlyCapability"));
 
-    // ratePassEnemyCapability
-    *(cost_visualization_msg->add_name_and_costs()) =
-        *createNameCostsPair("ratePassEnemyRisk", ratings.at("ratePassEnemyRisk"));
+    // // ratePassEnemyCapability
+    // *(cost_visualization_msg->add_name_and_costs()) =
+    //     *createNameCostsPair("ratePassEnemyRisk", ratings.at("ratePassEnemyRisk"));
 
-    // ratePassOpenness
-    *(cost_visualization_msg->add_name_and_costs()) =
-        *createNameCostsPair("ratePassShootScore", ratings.at("ratePassShootScore"));
+    // // ratePassOpenness
+    // *(cost_visualization_msg->add_name_and_costs()) =
+    //     *createNameCostsPair("ratePassShootScore", ratings.at("ratePassShootScore"));
 
     return cost_visualization_msg;
 }
