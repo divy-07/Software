@@ -45,5 +45,6 @@ message CostVisualization
     uint32 num_rows                       = 1;
     uint32 num_cols                       = 2;
     // repeated NameCostsPair name_and_costs = 3;
-    NameCostsPair name_and_costs = 3;
+    // NameCostsPair name_and_costs = 3;
+    repeated double cost = 3;
 }

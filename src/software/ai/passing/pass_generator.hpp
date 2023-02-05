@@ -215,11 +215,11 @@ void PassGenerator<ZoneEnum>::sampleZoneCentrePasses(const World& world)
     double width  = world.field().xLength() / NUM_COLS;
     double height = world.field().yLength() / NUM_ROWS;
 
-    std::unordered_map<std::string, std::vector<double>> func_to_costs;
-    std::vector<double> static_pos_quality_costs;
-    std::vector<double> pass_friendly_capability_costs;
-    std::vector<double> pass_enemy_risk_costs;
-    std::vector<double> pass_shoot_score_costs;
+    std::vector<double> costs;
+    double static_pos_quality_costs;
+    double pass_friendly_capability_costs;
+    double pass_enemy_risk_costs;
+    double pass_shoot_score_costs;
 
     // We loop column wise (in the same order as how zones are defined)
     for (int i = 0; i < NUM_COLS; i++)
@@ -233,9 +233,42 @@ void PassGenerator<ZoneEnum>::sampleZoneCentrePasses(const World& world)
             auto pass = Pass(world.ball().position(), Point(x, y),
                              passing_config_.max_pass_speed_m_per_s());
 
+            static_pos_quality_costs = 1;
+            pass_friendly_capability_costs = 1;
+            pass_enemy_risk_costs = 1;
+            pass_shoot_score_costs = 1;
+
             // getStaticPositionQuality
-            static_pos_quality_costs.push_back(getStaticPositionQuality(
-                world.field(), pass.receiverPoint(), passing_config_));
+            if (passing_config_.cost_vis_config().static_position_quality()) {
+                static_pos_quality_costs = getStaticPositionQuality(
+                    world.field(), pass.receiverPoint(), passing_config_);
+            }
+
+            // ratePassFriendlyCapability
+            if (passing_config_.cost_vis_config().pass_friendly_capability()) {
+                pass_friendly_capability_costs = ratePassFriendlyCapability(world.friendlyTeam(), pass, passing_config_);
+            }
+
+            // ratePassEnemyRisk
+            if (passing_config_.cost_vis_config().pass_enemy_risk()) {
+                pass_enemy_risk_costs = ratePassEnemyRisk(
+                    world.enemyTeam(), pass,
+                    Duration::fromSeconds(passing_config_.enemy_reaction_time()),
+                    passing_config_.enemy_proximity_importance());
+            }
+
+            // ratePassShootScore
+            if (passing_config_.cost_vis_config().pass_shoot_score()) {
+                pass_shoot_score_costs = ratePassShootScore(
+                    world.field(), world.enemyTeam(), pass, passing_config_);
+            }
+
+            costs.push_back(static_pos_quality_costs * pass_friendly_capability_costs * pass_enemy_risk_costs * pass_shoot_score_costs);
+
+
+            // // getStaticPositionQuality
+            // static_pos_quality_costs.push_back(getStaticPositionQuality(
+            //     world.field(), pass.receiverPoint(), passing_config_));
 
             // // ratePassFriendlyCapability
             // pass_friendly_capability_costs.push_back(
@@ -250,15 +283,16 @@ void PassGenerator<ZoneEnum>::sampleZoneCentrePasses(const World& world)
             // // ratePassShootScore
             // pass_shoot_score_costs.push_back(ratePassShootScore(
             //     world.field(), world.enemyTeam(), pass, passing_config_));
+
         }
     }
 
-    func_to_costs["getStaticPositionQuality"]   = static_pos_quality_costs;
+    // func_to_costs["getStaticPositionQuality"]   = static_pos_quality_costs;
     // func_to_costs["ratePassFriendlyCapability"] = pass_friendly_capability_costs;
     // func_to_costs["ratePassEnemyRisk"]          = pass_enemy_risk_costs;
     // func_to_costs["ratePassShootScore"]         = pass_shoot_score_costs;
 
-    LOG(VISUALIZE) << *createCostVisualization(func_to_costs, NUM_ROWS, NUM_COLS);
+    LOG(VISUALIZE) << *createCostVisualization(costs, NUM_ROWS, NUM_COLS);
 }
 
 template <class ZoneEnum>

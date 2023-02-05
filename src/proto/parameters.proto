@@ -124,6 +124,7 @@ message PassingConfig
 
     // Whether we should generate sample passes for the cost visualization
     required bool generate_sample_passes = 10 [default = false];
+    required CostVisualizationConfig cost_vis_config = 11;
 }
 
 message GoalieTacticConfig
@@ -293,4 +294,11 @@ message RobotNavigationObstacleConfig
         (bounds).min_double_value = 0.0,
         (bounds).max_double_value = 10.0
     ];
+}
+message CostVisualizationConfig
+{
+    required bool static_position_quality = 1 [default = false];
+    required bool pass_friendly_capability = 2 [default = false];
+    required bool pass_enemy_risk = 3 [default = false];
+    required bool pass_shoot_score = 4 [default = false];
 }

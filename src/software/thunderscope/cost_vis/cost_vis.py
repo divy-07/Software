@@ -79,19 +79,33 @@ class CostVisualizationWidget(QtWidgets.QMainWindow):
         #     cost_vis.num_cols, cost_vis.num_rows
         # )
 
-        self.static_position_quality = np.array(
-            cost_vis.name_and_costs.cost
+        # self.static_position_quality = np.array(
+        #     cost_vis.static_pos_quality.cost
+        # ).reshape(cost_vis.num_cols, cost_vis.num_rows)
+        # self.pass_friendly_capability = np.array(
+        #     cost_vis.pass_friendly_capability.cost
+        # ).reshape(cost_vis.num_cols, cost_vis.num_rows)
+        # self.pass_enemy_risk = np.array(
+        #     cost_vis.pass_enemy_capability.cost
+        # ).reshape(cost_vis.num_cols, cost_vis.num_rows)
+        # self.pass_shoot_score = np.array(
+        #     cost_vis.pass_shoot_score.cost
+        # ).reshape(cost_vis.num_cols, cost_vis.num_rows)
+
+        self.data = np.array(
+            cost_vis.cost
         ).reshape(cost_vis.num_cols, cost_vis.num_rows)
 
+
         # multiply all the arrays together
-        self.data = np.ones(shape=(6, 3))
-        if self.static_pos_box.isChecked():
-            self.data = self.static_position_quality
-        if self.pass_friend_box.isChecked():
-            self.data *= self.pass_friendly_capability
-        if self.pass_enemy_box.isChecked():
-            self.data *= self.pass_enemy_risk
-        if self.pass_shoot_box.isChecked():
-            self.data *= self.pass_shoot_score
+        # self.data = np.ones(shape=(6, 3))
+        # if self.static_pos_box.isChecked():
+        #     self.data = self.static_position_quality
+        # if self.pass_friend_box.isChecked():
+        #     self.data *= self.pass_friendly_capability
+        # if self.pass_enemy_box.isChecked():
+        #     self.data *= self.pass_enemy_risk
+        # if self.pass_shoot_box.isChecked():
+        #     self.data *= self.pass_shoot_score
 
         self.img.setImage(self.data)
